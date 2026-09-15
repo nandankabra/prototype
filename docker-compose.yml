@@ -1,0 +1,76 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bytecode}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bytecode_local_demo}
+      POSTGRES_DB: ${POSTGRES_DB:-bytecode}
+    ports: ["127.0.0.1:${POSTGRES_PORT:-5432}:5432"]
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 25
+  mock-gov-api:
+    build: ./mock-gov-api
+    ports: ["127.0.0.1:${MOCK_GOV_PORT:-8001}:8001"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+  qdrant:
+    image: qdrant/qdrant:v1.13.6
+    ports: ["127.0.0.1:${QDRANT_PORT:-6333}:6333"]
+    volumes: ["qdrant_data:/qdrant/storage"]
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/6333'"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_ENV: ${APP_ENV:-demo}
+      DEMO_MODE: ${DEMO_MODE:-true}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://bytecode:bytecode_local_demo@postgres:5432/bytecode}
+      MOCK_GOV_API_URL: ${MOCK_GOV_API_URL:-http://mock-gov-api:8001}
+      QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
+      JWT_SECRET: ${JWT_SECRET:-}
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://api.openai.com/v1}
+      LLM_MODEL: ${LLM_MODEL:-gpt-4o-mini}
+      VECTOR_PROVIDER: ${VECTOR_PROVIDER:-qdrant}
+      ENABLE_HEAVY_ML: ${ENABLE_HEAVY_ML:-false}
+      OCR_PROVIDER: ${OCR_PROVIDER:-paddle}
+      MATCH_THRESHOLD: ${MATCH_THRESHOLD:-0.95}
+      REVIEW_THRESHOLD: ${REVIEW_THRESHOLD:-0.80}
+    ports: ["127.0.0.1:${BACKEND_PORT:-8000}:8000"]
+    volumes: ["uploads:/app/data"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      mock-gov-api: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+  frontend:
+    build: ./frontend
+    ports: ["127.0.0.1:${FRONTEND_PORT:-3000}:80"]
+    depends_on:
+      backend: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+volumes:
+  postgres_data:
+  qdrant_data:
+  uploads:
