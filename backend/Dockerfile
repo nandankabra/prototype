@@ -6,8 +6,7 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ .
 COPY sample-docs/ sample-docs/
-COPY mock-gov-api/ /mock-gov-api/
 RUN mkdir -p /app/data && useradd --uid 10001 --create-home app && chown -R app:app /app
 USER app
 EXPOSE 8000
-CMD ["sh", "-c", "alembic upgrade head && python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]

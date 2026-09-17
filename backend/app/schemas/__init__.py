@@ -8,6 +8,22 @@ class LoginRequest(BaseModel):
     password: str = Field(max_length=200)
 
 
+class RegistrationRequest(BaseModel):
+    name: str = Field(min_length=3, max_length=200)
+    email: str = Field(max_length=255)
+    password: str = Field(min_length=12, max_length=200)
+
+
+class GeMTenderImportRequest(BaseModel):
+    external_bid_id: str = Field(min_length=5, max_length=120)
+    official_document_url: str = Field(min_length=12, max_length=2000)
+
+
+class ClarificationRequestBody(BaseModel):
+    message: str = Field(min_length=10, max_length=4000)
+    requirement_id: str | None = None
+
+
 class DemoLogin(BaseModel):
     role: Literal['PROCUREMENT_OFFICER', 'AUDITOR', 'ADMIN']
 

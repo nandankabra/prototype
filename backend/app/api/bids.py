@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.core.security import current_user, officer
+from app.core.security import current_user, officer, bidder
 from app.core.config import settings
 from app.models import Bid, Bidder, Tender, ProcessingRun, OfficerDecision, AIRecommendation, uid
 from app.schemas import BidRequest, ProcessRequest, DecisionRequest
@@ -13,27 +13,32 @@ from app.services.audit_service import append_event
 router = APIRouter(prefix='/api/bids', tags=['bids'])
 
 
-def get_bid(db, bid_id, lock=False):
+def get_bid(db, bid_id, lock=False, user=None):
     query = select(Bid).where(Bid.id == bid_id)
     bid = db.scalar(query.with_for_update() if lock else query)
     if not bid:
         raise HTTPException(404, 'Bid not found')
+    if user and user.role == 'BIDDER' and bid.submitted_by_user_id != user.id:
+        raise HTTPException(403, 'This bidder account can access only its own submission')
     return bid
 
 
 @router.get('')
 def bids(db: Session = Depends(get_db), user=Depends(current_user)):
-    return [bid_summary(db, b) for b in db.scalars(select(Bid).order_by(Bid.created_at))]
+    statement = select(Bid).order_by(Bid.created_at)
+    if user.role == 'BIDDER':
+        statement = statement.where(Bid.submitted_by_user_id == user.id)
+    return [bid_summary(db, b) for b in db.scalars(statement) if db.get(Tender, b.tender_id).source == 'GEM']
 
 
 @router.post('', status_code=201)
-def create_bid(body: BidRequest, db: Session = Depends(get_db), user=Depends(officer)):
+def create_bid(body: BidRequest, db: Session = Depends(get_db), user=Depends(bidder)):
     if not db.get(Tender, body.tender_id):
         raise HTTPException(404, 'Tender not found')
     bidder = Bidder(id=uid(), **body.model_dump(exclude={'tender_id'}), profile={'is_fictional': False})
     db.add(bidder)
     db.flush()
-    bid = Bid(id=uid(), tender_id=body.tender_id, bidder_id=bidder.id, scenario='CUSTOM')
+    bid = Bid(id=uid(), tender_id=body.tender_id, bidder_id=bidder.id, submitted_by_user_id=user.id, scenario='CUSTOM')
     db.add(bid)
     db.flush()
     append_event(db, action='BID_CREATED', object_id=bid.id, bid_id=bid.id, actor=user.email, role=user.role,
@@ -43,24 +48,29 @@ def create_bid(body: BidRequest, db: Session = Depends(get_db), user=Depends(off
 
 @router.get('/{bid_id}')
 def detail(bid_id: str, db: Session = Depends(get_db), user=Depends(current_user)):
-    return review(db, get_bid(db, bid_id))
+    return review(db, get_bid(db, bid_id, user=user))
 
 
 @router.post('/{bid_id}/process', status_code=202)
 def process(bid_id: str, body: ProcessRequest, tasks: BackgroundTasks, db: Session = Depends(get_db), user=Depends(officer)):
-    bid = get_bid(db, bid_id, lock=True)
+    bid = get_bid(db, bid_id, lock=True, user=user)
     if bid.status == 'PROCESSING':
         raise HTTPException(409, 'A verification run is already in progress')
-    if body.unavailable_sources and not settings.demo_mode:
-        raise HTTPException(403, 'Outage simulation is only available in demo mode')
+    if body.unavailable_sources:
+        raise HTTPException(422, 'Provider availability is determined by the configured source registry, not by request input')
     run = queue_run(db, bid, user.email, user.role)
-    tasks.add_task(process_bid, run.id, body.unavailable_sources)
+    if settings.hosted_mode:
+        # Keep the request alive while serverless compute processes this run.
+        process_bid(run.id, body.unavailable_sources)
+        db.refresh(run)
+    else:
+        tasks.add_task(process_bid, run.id, body.unavailable_sources)
     return serialize(run)
 
 
 @router.get('/{bid_id}/status')
 def status(bid_id: str, db: Session = Depends(get_db), user=Depends(current_user)):
-    bid = get_bid(db, bid_id)
+    bid = get_bid(db, bid_id, user=user)
     return {'bid_status': bid.status, 'run': serialize(db.get(ProcessingRun, bid.current_run_id)) if bid.current_run_id else None}
 
 
@@ -69,12 +79,12 @@ def status(bid_id: str, db: Session = Depends(get_db), user=Depends(current_user
 @router.get('/{bid_id}/risk')
 @router.get('/{bid_id}/ai-summary')
 def findings(bid_id: str, db: Session = Depends(get_db), user=Depends(current_user)):
-    return review(db, get_bid(db, bid_id))
+    return review(db, get_bid(db, bid_id, user=user))
 
 
 @router.post('/{bid_id}/decision')
 def decide(bid_id: str, body: DecisionRequest, db: Session = Depends(get_db), user=Depends(officer)):
-    bid = get_bid(db, bid_id, lock=True)
+    bid = get_bid(db, bid_id, lock=True, user=user)
     run = db.get(ProcessingRun, bid.current_run_id) if bid.current_run_id else None
     if not run or run.status != 'COMPLETED' or body.run_id != run.id:
         raise HTTPException(409, 'Review the latest completed verification run before deciding')

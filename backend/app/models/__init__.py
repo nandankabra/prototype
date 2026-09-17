@@ -2,7 +2,7 @@
 import uuid
 from datetime import datetime, timezone
 from typing import Any
-from sqlalchemy import String, Text, JSON, ForeignKey, DateTime, Integer, Float, Boolean, event
+from sqlalchemy import String, Text, JSON, ForeignKey, DateTime, Integer, Float, Boolean, LargeBinary, event
 from sqlalchemy.orm import Mapped, mapped_column
 from app.core.database import Base
 
@@ -38,6 +38,100 @@ class Tender(Identity, Base):
     required_documents: Mapped[list] = mapped_column(JSON)
     local_content_threshold: Mapped[float] = mapped_column(Float, default=50)
     scoring_weights: Mapped[dict] = mapped_column(JSON)
+    external_bid_id: Mapped[str | None] = mapped_column(String(120), nullable=True, index=True)
+    source: Mapped[str] = mapped_column(String(40), default='GEM')
+    source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    category: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    ministry: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    organisation: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    buyer: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    bid_type: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    estimated_value: Mapped[float | None] = mapped_column(Float, nullable=True)
+    status: Mapped[str] = mapped_column(String(40), default='IMPORTED')
+    last_synced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    raw_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
+    content_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+
+class TenderVersion(Identity, Base):
+    __tablename__ = 'tender_versions'
+    tender_id: Mapped[str] = mapped_column(ForeignKey('tenders.id'), index=True)
+    version_number: Mapped[int] = mapped_column(Integer)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    snapshot_metadata: Mapped[dict] = mapped_column('metadata', JSON, default=dict)
+    change_summary: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
+class TenderDocument(Identity, Base):
+    __tablename__ = 'tender_documents'
+    tender_id: Mapped[str] = mapped_column(ForeignKey('tenders.id'), index=True)
+    url: Mapped[str] = mapped_column(Text)
+    document_type: Mapped[str] = mapped_column(String(60), default='BID_DOCUMENT')
+    sha256: Mapped[str] = mapped_column(String(64))
+    extracted_text: Mapped[str] = mapped_column(Text, default='')
+    pages: Mapped[list] = mapped_column(JSON, default=list)
+    fetch_status: Mapped[str] = mapped_column(String(40), default='IMPORTED')
+
+
+class TenderRequirement(Identity, Base):
+    __tablename__ = 'tender_requirements'
+    tender_id: Mapped[str] = mapped_column(ForeignKey('tenders.id'), index=True)
+    requirement_code: Mapped[str] = mapped_column(String(80))
+    type: Mapped[str] = mapped_column(String(80))
+    label: Mapped[str] = mapped_column(String(255))
+    mandatory: Mapped[bool] = mapped_column(Boolean, default=True)
+    requirement_value: Mapped[dict] = mapped_column(JSON, default=dict)
+    accepted_evidence: Mapped[list] = mapped_column(JSON, default=list)
+    exemptions: Mapped[list] = mapped_column(JSON, default=list)
+    source_document_id: Mapped[str | None] = mapped_column(ForeignKey('tender_documents.id'), nullable=True)
+    source_page: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    source_clause: Mapped[str | None] = mapped_column(String(160), nullable=True)
+    source_text: Mapped[str] = mapped_column(Text)
+    confidence: Mapped[float] = mapped_column(Float, default=0)
+    status: Mapped[str] = mapped_column(String(40), default='EXTRACTED')
+
+
+class TenderCorrigendum(Identity, Base):
+    __tablename__ = 'tender_corrigenda'
+    tender_id: Mapped[str] = mapped_column(ForeignKey('tenders.id'), index=True)
+    source_url: Mapped[str] = mapped_column(Text)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    changed_clauses: Mapped[list] = mapped_column(JSON, default=list)
+
+
+class VerificationSource(Identity, Base):
+    __tablename__ = 'verification_sources'
+    source_code: Mapped[str] = mapped_column(String(40), unique=True)
+    document_type: Mapped[str] = mapped_column(String(80))
+    source_name: Mapped[str] = mapped_column(String(255))
+    authority: Mapped[str] = mapped_column(String(255))
+    base_url: Mapped[str] = mapped_column(Text)
+    verification_method: Mapped[str] = mapped_column(String(60))
+    api_available: Mapped[bool] = mapped_column(Boolean, default=False)
+    api_requires_approval: Mapped[bool] = mapped_column(Boolean, default=True)
+    manual_fallback: Mapped[bool] = mapped_column(Boolean, default=True)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    last_health_check: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    priority: Mapped[int] = mapped_column(Integer, default=100)
+
+
+class CrossDocumentCheck(Identity, Base):
+    __tablename__ = 'cross_document_checks'
+    run_id: Mapped[str] = mapped_column(ForeignKey('processing_runs.id'), index=True)
+    field: Mapped[str] = mapped_column(String(80))
+    status: Mapped[str] = mapped_column(String(32))
+    reason: Mapped[str] = mapped_column(Text)
+    evidence: Mapped[list] = mapped_column(JSON, default=list)
+
+
+class ClarificationRequest(Identity, Base):
+    __tablename__ = 'clarification_requests'
+    bid_id: Mapped[str] = mapped_column(ForeignKey('bids.id'), index=True)
+    requirement_id: Mapped[str | None] = mapped_column(ForeignKey('tender_requirements.id'), nullable=True)
+    requested_by: Mapped[str] = mapped_column(String(255))
+    message: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(32), default='OPEN')
 
 
 class TenderRule(Identity, Base):
@@ -66,6 +160,7 @@ class Bid(Identity, Base):
     __tablename__ = 'bids'
     tender_id: Mapped[str] = mapped_column(ForeignKey('tenders.id'), index=True)
     bidder_id: Mapped[str] = mapped_column(ForeignKey('bidders.id'), index=True)
+    submitted_by_user_id: Mapped[str | None] = mapped_column(ForeignKey('users.id'), nullable=True, index=True)
     scenario: Mapped[str] = mapped_column(String(40), default='CUSTOM')
     status: Mapped[str] = mapped_column(String(40), default='AWAITING_DOCUMENTS')
     current_run_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
@@ -85,6 +180,13 @@ class Document(Identity, Base):
     pages: Mapped[list] = mapped_column(JSON, default=list)
     extraction: Mapped[dict] = mapped_column(JSON, default=dict)
     is_seed: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class DocumentContent(Base):
+    """Durable originals for hosted instances; bytes never appear in review JSON."""
+    __tablename__ = 'document_contents'
+    document_id: Mapped[str] = mapped_column(ForeignKey('documents.id'), primary_key=True)
+    content: Mapped[bytes] = mapped_column(LargeBinary)
 
 
 class ProcessingRun(Identity, Base):

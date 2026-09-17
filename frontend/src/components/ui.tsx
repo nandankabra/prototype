@@ -10,7 +10,7 @@ export function Badge({ value }: { value?: string | null }) {
   const tone = /^(VERIFIED|MATCH|PASS|LOW|QUALIFIED|COMPLETED|ACTIVE)$/.test(status) ? 'green' : /MISMATCH|FAIL|CRITICAL|DISQUALIFIED|EXPIRED/.test(status) ? 'red' : /HIGH|MEDIUM|REVIEW|CLARIFICATION|MISSING|UNAVAILABLE|PENDING/.test(status) ? 'amber' : 'neutral';
   return <span className={`badge ${tone}`}><span className="badge-dot"/>{pretty(status)}</span>;
 }
-export function MockLabel() { return <span className="mock-label"><ShieldCheck size={13}/> MOCK AUTHORISED SOURCE — DEMO</span>; }
+export function SourceStatus() { return <span className="mock-label"><ShieldCheck size={13}/> SOURCE METHOD SHOWN PER CHECK</span>; }
 export function ErrorBox({ message }: {message: string}) { return message ? <div role="alert" className="error-box"><AlertCircle size={18}/>{message}</div> : null; }
 export function Loading() { return <div className="loading"><LoaderCircle className="spin" size={22}/> Loading workspace…</div>; }
 export function Empty({ title, children }: {title: string; children?: ReactNode}) { return <div className="empty"><ShieldCheck size={30}/><h3>{title}</h3><p>{children}</p></div>; }

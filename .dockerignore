@@ -11,3 +11,6 @@ backend/data
 **/.env
 output
 sample-docs/generated
+.env*
+**/.env*
+.vercel

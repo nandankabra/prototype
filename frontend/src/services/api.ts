@@ -15,6 +15,7 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
   return response.json();
 }
 export const post = <T,>(path: string, data: unknown = {}) => request<T>(path, { method: 'POST', body: JSON.stringify(data) });
+export const formPost = <T,>(path: string, data: FormData) => request<T>(path, { method: 'POST', body: data });
 export async function fileBlob(path: string): Promise<Blob> {
   const response = await fetch(`/api${path}`, { headers: { Authorization: `Bearer ${getToken()}` } });
   if (!response.ok) throw new Error('The document could not be downloaded');

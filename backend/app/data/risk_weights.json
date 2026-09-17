@@ -1,0 +1,14 @@
+{
+  "identity_mismatch": 18,
+  "expired_certificate": 18,
+  "missing_mandatory_document": 22,
+  "source_mismatch": 18,
+  "source_unavailable": 6,
+  "blacklisting_hit": 80,
+  "duplicate_document": 8,
+  "unreadable_document": 12,
+  "tender_rule_violation": 12,
+  "unknown_validity": 10,
+  "inconsistent_company": 15,
+  "suspicious_metadata": 8
+}

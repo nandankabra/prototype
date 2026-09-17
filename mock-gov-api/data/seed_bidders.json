@@ -1,0 +1,1052 @@
+{
+  "355e17b7-c978-54cc-b465-9c723cc07492": {
+    "PAN": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDA1000F"
+    },
+    "GST": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDA1000F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000000"
+    },
+    "INCOME_TAX": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDA1000F"
+    },
+    "EPFO": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100000"
+    },
+    "ESIC": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0000"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0000"
+    },
+    "NSIC": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0000"
+    },
+    "DIGILOCKER": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0000"
+    },
+    "BLACKLIST": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDA1000F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Zenith Industrial Systems Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0000",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "9a3e0583-d91c-54cc-96bf-af2fb73ca2fd": {
+    "PAN": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDB1001F"
+    },
+    "GST": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDB1001F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000001"
+    },
+    "INCOME_TAX": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDB1001F"
+    },
+    "EPFO": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100001"
+    },
+    "ESIC": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0001"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0001"
+    },
+    "NSIC": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0001"
+    },
+    "DIGILOCKER": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0001"
+    },
+    "BLACKLIST": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDB1001F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0001",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "aec3af29-59e2-52ef-a2ab-19eb6707c85f": {
+    "PAN": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDC1002F"
+    },
+    "GST": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDC1002F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000002"
+    },
+    "INCOME_TAX": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDC1002F"
+    },
+    "EPFO": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100002"
+    },
+    "ESIC": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0002"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0002"
+    },
+    "NSIC": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0002"
+    },
+    "DIGILOCKER": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0002"
+    },
+    "BLACKLIST": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDC1002F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Meridian Safety Products Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0002",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "bd1038c4-525d-5699-8a8b-5d58ad003c03": {
+    "PAN": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDD1003F"
+    },
+    "GST": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDD1003F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000003"
+    },
+    "INCOME_TAX": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDD1003F"
+    },
+    "EPFO": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100003"
+    },
+    "ESIC": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0003"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0003"
+    },
+    "NSIC": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0003"
+    },
+    "DIGILOCKER": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0003"
+    },
+    "BLACKLIST": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDD1003F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Coral Engineering Works Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0003",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "7812a229-37fc-5fd2-b1a6-4debb927a034": {
+    "PAN": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDE1004F"
+    },
+    "GST": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDE1004F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000004"
+    },
+    "INCOME_TAX": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDE1004F"
+    },
+    "EPFO": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100004"
+    },
+    "ESIC": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0004"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0004"
+    },
+    "NSIC": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0004"
+    },
+    "DIGILOCKER": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0004"
+    },
+    "BLACKLIST": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDE1004F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Atlas Protective Systems Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0004",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "d6007fb3-3fe0-529a-b3da-bf932196d280": {
+    "PAN": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDF1005F"
+    },
+    "GST": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDF1005F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000005"
+    },
+    "INCOME_TAX": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDF1005F"
+    },
+    "EPFO": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100005"
+    },
+    "ESIC": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0005"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0005"
+    },
+    "NSIC": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0005"
+    },
+    "DIGILOCKER": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0005"
+    },
+    "BLACKLIST": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "LISTED",
+      "is_fictional": true,
+      "identifier": "ABCDF1005F",
+      "listed": true
+    },
+    "OEM": {
+      "company_name": "Crestline Industrial Supply Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0005",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "237c0e64-7451-544c-bb30-65f1f0b6857a": {
+    "PAN": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDB1001F"
+    },
+    "GST": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDB1001F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000006"
+    },
+    "INCOME_TAX": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDB1001F"
+    },
+    "EPFO": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100006"
+    },
+    "ESIC": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0006"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0006"
+    },
+    "NSIC": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0006"
+    },
+    "DIGILOCKER": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0006"
+    },
+    "BLACKLIST": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDB1001F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "ABC Industrial Solutions Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0006",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "4092f828-6c8e-58a7-b9a7-16b3d570a8ce": {
+    "PAN": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDH1007F"
+    },
+    "GST": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDH1007F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000007"
+    },
+    "INCOME_TAX": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDH1007F"
+    },
+    "EPFO": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100007"
+    },
+    "ESIC": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0007"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0007"
+    },
+    "NSIC": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0007"
+    },
+    "DIGILOCKER": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0007"
+    },
+    "BLACKLIST": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDH1007F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Harbor Technical Services Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0007",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "8f5fc2db-9168-5378-8bae-3cf2067c81ad": {
+    "PAN": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDI1008F"
+    },
+    "GST": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDI1008F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000008"
+    },
+    "INCOME_TAX": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDI1008F"
+    },
+    "EPFO": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100008"
+    },
+    "ESIC": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0008"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0008"
+    },
+    "NSIC": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0008"
+    },
+    "DIGILOCKER": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0008"
+    },
+    "BLACKLIST": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDI1008F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Aster Process Controls Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0008",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "ebc3b5f0-1bda-5b49-9b0e-656e9eb1bc61": {
+    "PAN": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDJ1009F"
+    },
+    "GST": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDJ1009F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000009"
+    },
+    "INCOME_TAX": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDJ1009F"
+    },
+    "EPFO": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100009"
+    },
+    "ESIC": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0009"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0009"
+    },
+    "NSIC": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0009"
+    },
+    "DIGILOCKER": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0009"
+    },
+    "BLACKLIST": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDJ1009F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Summit Mechanical Works Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0009",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "979d666d-d061-518f-b760-72b516e41553": {
+    "PAN": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDK1010F"
+    },
+    "GST": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDK1010F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000010"
+    },
+    "INCOME_TAX": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDK1010F"
+    },
+    "EPFO": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100010"
+    },
+    "ESIC": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0010"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0010"
+    },
+    "NSIC": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0010"
+    },
+    "DIGILOCKER": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0010"
+    },
+    "BLACKLIST": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDK1010F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Vertex Energy Systems Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0010",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "013a6b84-7318-50ca-b74e-869a7fdef7d9": {
+    "PAN": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDL1011F"
+    },
+    "GST": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDL1011F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000011"
+    },
+    "INCOME_TAX": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDL1011F"
+    },
+    "EPFO": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100011"
+    },
+    "ESIC": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0011"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0011"
+    },
+    "NSIC": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0011"
+    },
+    "DIGILOCKER": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0011"
+    },
+    "BLACKLIST": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDL1011F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Orion Safety Technologies Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0011",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "5f4ccb32-8af0-585c-bbec-db6fbced3131": {
+    "PAN": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDM1012F"
+    },
+    "GST": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDM1012F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000012"
+    },
+    "INCOME_TAX": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDM1012F"
+    },
+    "EPFO": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100012"
+    },
+    "ESIC": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0012"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0012"
+    },
+    "NSIC": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0012"
+    },
+    "DIGILOCKER": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0012"
+    },
+    "BLACKLIST": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDM1012F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Pioneer Industrial Equipment Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0012",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "58f7f9e4-0853-5a0a-988b-84b24856de09": {
+    "PAN": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDN1013F"
+    },
+    "GST": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDN1013F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000013"
+    },
+    "INCOME_TAX": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDN1013F"
+    },
+    "EPFO": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100013"
+    },
+    "ESIC": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0013"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0013"
+    },
+    "NSIC": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0013"
+    },
+    "DIGILOCKER": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0013"
+    },
+    "BLACKLIST": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDN1013F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Trident Maintenance Services Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0013",
+      "valid_until": "2028-12-31"
+    }
+  },
+  "39bab8dd-3bd2-56db-a6e1-8fef967efee9": {
+    "PAN": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ABCDO1014F"
+    },
+    "GST": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "33ABCDO1014F1Z5"
+    },
+    "UDYAM": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "UDYAM-TN-02-1000014"
+    },
+    "INCOME_TAX": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "FILED",
+      "is_fictional": true,
+      "identifier": "ABCDO1014F"
+    },
+    "EPFO": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "TNDEMO100014"
+    },
+    "ESIC": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "ESIC-DEMO-0014"
+    },
+    "STARTUP_INDIA": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DPIIT-DEMO-0014"
+    },
+    "NSIC": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "NSIC-DEMO-0014"
+    },
+    "DIGILOCKER": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "ACTIVE",
+      "is_fictional": true,
+      "identifier": "DL-DEMO-0014"
+    },
+    "BLACKLIST": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "CLEAR",
+      "is_fictional": true,
+      "identifier": "ABCDO1014F",
+      "listed": false
+    },
+    "OEM": {
+      "company_name": "Nova Instrumentation Private Limited",
+      "status": "VALID",
+      "is_fictional": true,
+      "identifier": "OEM-DEMO-0014",
+      "valid_until": "2028-12-31"
+    }
+  }
+}

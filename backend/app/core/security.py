@@ -35,12 +35,18 @@ def current_user(credentials: HTTPAuthorizationCredentials = Depends(bearer), db
             raise ValueError('Unknown user')
         return user
     except (jwt.PyJWTError, ValueError, AttributeError, KeyError):
-        raise HTTPException(401, 'Please sign in with your demo account')
+        raise HTTPException(401, 'Please sign in to continue')
 
 
 def officer(user: User = Depends(current_user)) -> User:
     if user.role not in {'PROCUREMENT_OFFICER', 'ADMIN'}:
         raise HTTPException(403, 'A procurement officer must perform this action')
+    return user
+
+
+def bidder(user: User = Depends(current_user)) -> User:
+    if user.role != 'BIDDER':
+        raise HTTPException(403, 'This action is available to the submitting bidder')
     return user
 
 

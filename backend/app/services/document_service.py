@@ -3,7 +3,8 @@ import hashlib
 import re
 from fastapi import HTTPException
 from app.core.config import settings
-from app.models import Document, uid
+from app.models import Document, DocumentContent, uid
+from app.core.database import SessionLocal
 
 MIME_TYPES = {'.pdf': 'application/pdf', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg'}
 
@@ -29,6 +30,10 @@ def save_upload(db, bid_id: str, filename: str, content: bytes, is_seed=False) -
                    sha256=hashlib.sha256(content).hexdigest(), is_seed=is_seed)
     db.add(doc)
     db.flush()
+    if settings.document_storage == 'database':
+        doc.path = 'database/' + path.name
+        db.add(DocumentContent(document_id=doc.id, content=content))
+        db.flush()
     return doc
 
 
@@ -38,4 +43,17 @@ def document_path(document: Document) -> Path:
     suffix = Path(document.path).suffix.lower()
     if suffix not in MIME_TYPES:
         raise ValueError('Unsupported stored document format')
-    return root / f'{document.id}{suffix}'
+    path = root / f'{document.id}{suffix}'
+    if document.path.startswith('database/') and not path.is_file():
+        with SessionLocal() as db:
+            stored = db.get(DocumentContent, document.id)
+            if stored is None:
+                raise FileNotFoundError('Original document is missing from durable storage')
+            content = stored.content
+        if hashlib.sha256(content).hexdigest() != document.sha256:
+            raise ValueError('Stored document failed its integrity check')
+        root.mkdir(parents=True, exist_ok=True)
+        temporary = root / f'.{document.id}-{uid()}.tmp'
+        temporary.write_bytes(content)
+        temporary.replace(path)
+    return path

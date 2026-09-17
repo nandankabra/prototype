@@ -25,6 +25,16 @@ def scenarios(db: Session = Depends(get_db), user=Depends(current_user)):
              'bid_id': db.scalar(select(Bid.id).where(Bid.scenario == code).order_by(Bid.created_at).limit(1))} for code, name, description in SCENARIOS]
 
 
+@router.post('/initialize')
+def initialize(user=Depends(officer)):
+    """Warm unprocessed seeded bids while the hosting request remains active."""
+    if not settings.demo_mode:
+        raise HTTPException(404)
+    from app.main import process_initial_seed
+    process_initial_seed()
+    return {'status': 'ready'}
+
+
 @router.post('/run/{scenario}', status_code=202)
 def run_scenario(scenario: str, tasks: BackgroundTasks, db: Session = Depends(get_db), user=Depends(officer)):
     if not settings.demo_mode:
@@ -37,5 +47,9 @@ def run_scenario(scenario: str, tasks: BackgroundTasks, db: Session = Depends(ge
     if bid.status == 'PROCESSING':
         raise HTTPException(409, 'This bid is currently processing')
     run = queue_run(db, bid, user.email, user.role)
-    tasks.add_task(process_bid, run.id)
+    if settings.hosted_mode:
+        process_bid(run.id)
+        db.refresh(run)
+    else:
+        tasks.add_task(process_bid, run.id)
     return serialize(run)

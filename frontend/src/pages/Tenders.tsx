@@ -1,25 +1,96 @@
-import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CalendarDays, FileStack, Plus, Search, Sparkles } from 'lucide-react';
-import type { Bid, Tender, User } from '../types';
-import { post, useApi } from '../services/api';
-import { Badge, BidTable, ErrorBox, Loading, Modal, PageHeading, Panel, dateTime, pretty } from '../components/ui';
-export function TenderList({user}:{user:User}){
-  const {data,error,reload}=useApi<Tender[]>('/tenders',5000),[search,setSearch]=useState(''),[create,setCreate]=useState(false);
-  if(!data)return error?<ErrorBox message={error}/>:<Loading/>;
-  return <><PageHeading eyebrow="PROCUREMENT PORTFOLIO" title="Tenders" description="Manage requirements and review bidder compliance across your tenders." actions={user.role!=='AUDITOR'?<button className="button primary" onClick={()=>setCreate(true)}><Plus size={17}/> Create tender</button>:undefined}/><ErrorBox message={error}/><div className="tender-summary"><FileStack size={22}/><strong>{data.length} tenders</strong><span>{data.reduce((n,t)=>n+(t.bidder_count||0),0)} participating bids</span><span>{data.reduce((n,t)=>n+(t.pending||0),0)} decisions pending</span></div><Panel><div className="toolbar"><div className="search-input"><Search size={17}/><input aria-label="Search tenders" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search tender title or reference…"/></div></div><div className="table-scroll"><table className="tender-table"><thead><tr><th>Tender / department</th><th>Deadline</th><th>Bids</th><th>Review status</th><th>Highest risk</th><th>Avg. compliance</th><th>Action</th></tr></thead><tbody>{data.filter(t=>`${t.title} ${t.reference}`.toLowerCase().includes(search.toLowerCase())).map(t=><tr key={t.id}><td><Link to={`/tenders/${t.id}`}><small className="tender-reference">{t.reference}</small><strong className="tender-title">{t.title}</strong><small className="block-small">{t.department}</small></Link></td><td>{dateTime(t.deadline)}</td><td>{t.bidder_count}</td><td><Badge value={t.review_status}/></td><td><Badge value={t.highest_risk}/></td><td><strong>{t.average_compliance ?? '—'}</strong><small> /100</small></td><td><Link className="text-button" to={`/tenders/${t.id}`}>Open <ArrowRight size={14}/></Link></td></tr>)}</tbody></table></div></Panel>{create&&<CreateTender onClose={()=>setCreate(false)} onSaved={()=>void reload()}/>}</>;
+import { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, Plus, Search, ShieldCheck, Upload } from 'lucide-react'
+import type { Tender, User } from '../types'
+import { formPost, post, useApi } from '../services/api'
+import { Badge, BidTable, Empty, ErrorBox, Loading, Modal, PageHeading, Panel } from '../components/ui'
+
+type Props = { user: User }
+
+export function TenderList({ user }: Props) {
+  const { data, error, loading, reload } = useApi<Tender[]>('/tenders')
+  const [search, setSearch] = useState('')
+  const [importOpen, setImportOpen] = useState(false)
+  const canImport = user.role === 'PROCUREMENT_OFFICER' || user.role === 'ADMIN'
+  const tenders = (data || []).filter((t) => `${t.title} ${t.external_bid_id || t.reference}`.toLowerCase().includes(search.toLowerCase()))
+
+  return <div className="page">
+    <PageHeading eyebrow="Procurement portfolio" title="Search GeM Tenders" description="Import official GeM tender documents and review extracted compliance requirements."
+      actions={canImport ? <button className="btn primary" onClick={() => setImportOpen(true)}><Upload size={17} /> Import official GeM document</button> : undefined} />
+    <Panel className="notice-panel"><ShieldCheck size={22} /><div><b>Official sources only</b><span>Use the public GeM bid-document page URL or a direct GeM PDF. Restricted pages, sign-in pages, and CAPTCHA-protected URLs cannot be imported.</span></div></Panel>
+    <div className="toolbar"><label className="search"><Search size={19} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by tender title or GeM bid number" /></label></div>
+    {loading && <Loading />}{error && <ErrorBox message={error} />}
+    {!loading && !error && !tenders.length && <Empty title="No GeM tenders imported yet">{canImport ? <><span>Import the official GeM PDF to create a verified tender record.</span><br/><button className="btn primary" onClick={() => setImportOpen(true)}><Upload size={17} /> Import official GeM document</button></> : 'A procurement officer can import an official GeM tender document.'}</Empty>}
+    {!!tenders.length && <Panel className="table-panel"><table><thead><tr><th>GeM tender</th><th>Organisation</th><th>Deadline</th><th>Requirements</th><th>Status</th><th /></tr></thead><tbody>{tenders.map((t) => <tr key={t.id}><td><b>{t.title}</b><small>{t.external_bid_id || t.reference}</small></td><td>{t.organisation || t.department || '—'}</td><td>{t.deadline || 'Not stated'}</td><td>{t.requirement_count ?? t.requirements?.length ?? 0}</td><td><Badge value={t.status} /></td><td><Link className="row-link" to={`/tenders/${t.id}`}>Review <ArrowRight size={16} /></Link></td></tr>)}</tbody></table></Panel>}
+    {importOpen && <ImportTender onClose={() => setImportOpen(false)} onDone={() => { setImportOpen(false); reload() }} />}
+  </div>
 }
-function CreateTender({onClose,onSaved}:{onClose:()=>void;onSaved:()=>void}){
-  const [error,setError]=useState(''),[busy,setBusy]=useState(false);const navigate=useNavigate();
-  return <Modal title="Create procurement tender" onClose={onClose}><form onSubmit={async e=>{e.preventDefault();setBusy(true);const f=new FormData(e.currentTarget);try{const tender=await post<Tender>('/tenders',{reference:f.get('reference'),title:f.get('title'),deadline:f.get('deadline'),description:f.get('description')});onSaved();onClose();navigate(`/tenders/${tender.id}`);}catch(e){setError((e as Error).message);}finally{setBusy(false);}}}><div className="modal-body"><ErrorBox message={error}/><label>Tender reference<input name="reference" required minLength={3} placeholder="CPCL/2026/PROC/006"/></label><label>Title<input name="title" required minLength={5} placeholder="Supply of industrial equipment"/></label><label>Submission deadline<input type="datetime-local" name="deadline" required/></label><label>Description<textarea name="description"/></label><div className="inline-notice section-gap">The standard eight-rule compliance template is applied. An administrator can adjust its JSON configuration.</div></div><div className="modal-actions"><button type="button" className="button" onClick={onClose}>Cancel</button><button className="button primary" disabled={busy}>Create tender</button></div></form></Modal>;
+
+function ImportTender({ onClose, onDone }: { onClose: () => void; onDone: () => void }) {
+  const [externalBidId, setExternalBidId] = useState('')
+  const [url, setUrl] = useState('')
+  const [file, setFile] = useState<File | null>(null)
+  const [method, setMethod] = useState<'URL' | 'UPLOAD'>('URL')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  async function submit(e: React.FormEvent) {
+    e.preventDefault(); setBusy(true); setError('')
+    try {
+      if (method === 'UPLOAD') {
+        if (!file) throw new Error('Choose the official GeM bid PDF before importing.')
+        const form = new FormData(); form.append('external_bid_id', externalBidId); form.append('document', file)
+        await formPost('/tenders/import/gem/upload', form)
+      } else await post('/tenders/import/gem', { external_bid_id: externalBidId, official_document_url: url })
+      onDone()
+    }
+    catch (err) { setError(err instanceof Error ? err.message : 'The GeM document could not be imported.') }
+    finally { setBusy(false) }
+  }
+  return <Modal title="Import official GeM document" onClose={onClose}>
+    <form className="form-stack" onSubmit={submit}>
+      <p className="muted">Use a public GeM document URL, or download the official bid PDF normally from GeM and upload it here. No right-click is needed.</p>
+      <div className="segmented"><button type="button" className={method === 'URL' ? 'active' : ''} onClick={() => setMethod('URL')}>Use public URL</button><button type="button" className={method === 'UPLOAD' ? 'active' : ''} onClick={() => setMethod('UPLOAD')}>Upload downloaded PDF</button></div>
+      <label>GeM bid number<input required value={externalBidId} onChange={(e) => setExternalBidId(e.target.value)} placeholder="GEM/2026/B/1234567" /></label>
+      {method === 'URL' ? <label>Official GeM document URL<input required type="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://bidplus-global.gem.gov.in/showbidDocument/..." /></label> : <label>Official GeM bid PDF<input required type="file" accept="application/pdf,.pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} /></label>}
+      {error && <ErrorBox message={error} />}
+      <div className="modal-actions"><button type="button" className="btn secondary" onClick={onClose}>Cancel</button><button className="btn primary" disabled={busy}>{busy ? 'Importing and extracting…' : 'Import and extract requirements'}</button></div>
+    </form>
+  </Modal>
 }
-export function TenderDetail({user}:{user:User}){
-  const {tenderId}=useParams();const {data,error,reload}=useApi<Tender>(`/tenders/${tenderId}`,4000),[create,setCreate]=useState(false),[actionError,setActionError]=useState(''),[busy,setBusy]=useState(false);
-  if(!data)return error?<ErrorBox message={error}/>:<Loading/>;
-  async function startAll(){setBusy(true);setActionError('');try{for(const b of data?.bids || []){if(b.status!=='PROCESSING')await post(`/bids/${b.id}/process`);}await reload();}catch(e){setActionError((e as Error).message);}finally{setBusy(false);}}
-  return <><Link to="/tenders" className="back-link"><ArrowLeft size={14}/> All tenders</Link><PageHeading eyebrow={data.reference} title={data.title} description={data.department} actions={user.role!=='AUDITOR'?<button className="button primary" disabled={busy||!data.bids?.length} onClick={()=>void startAll()}><Sparkles size={17}/> Start AI Compliance Review</button>:undefined}/><ErrorBox message={error||actionError}/><div className="tender-detail-meta"><span><CalendarDays size={17}/> Submission: {dateTime(data.deadline)}</span><span>{data.bids?.length} bids</span><span>{data.rules?.filter(r=>r.enabled).length} active tender rules</span><Badge value={data.bids?.every(b=>b.final_decision)&&data.bids.length?'COMPLETED':'IN REVIEW'}/></div><div className="stack"><div className="two-col"><Panel title="Tender requirements"><div className="content-pad"><p className="tender-description">{data.description}</p><div className="label-value"><span>Minimum local content</span><strong>{data.local_content_threshold}% declared</strong></div><div className="required-docs">{data.required_documents.map(d=><span key={d}><FileStack size={14}/>{pretty(d)}</span>)}</div></div></Panel><Panel title="Compliance template" subtitle="JSON-configurable tender requirements" action={<Link className="text-button" to={`/rules?tender=${data.id}`}>View rules <ArrowRight size={14}/></Link>}><div className="template-rules">{data.rules?.map(r=><div key={r.id}><code>{r.rule_id}</code><span>{r.name}</span><Badge value={r.enabled?'ACTIVE':'DISABLED'}/></div>)}</div></Panel></div><Panel title="Participating bidders" subtitle="Review documents, findings, and officer decisions" action={user.role!=='AUDITOR'?<button className="text-button" onClick={()=>setCreate(true)}><Plus size={15}/> Add bidder</button>:undefined}><BidTable bids={data.bids||[]}/></Panel><Panel title="Tender review timeline" subtitle="Latest processing and decision state for each participating bid"><div className="content-pad">{data.bids?.map(b=><div className="label-value" key={b.id}><Link to={`/bids/${b.id}?tab=Audit+Trail`}>{b.bidder.name}</Link><Badge value={b.final_decision||b.status}/></div>)}</div></Panel></div>{create&&<CreateBid tender={data} onClose={()=>setCreate(false)} onSaved={()=>void reload()}/>}</>;
+
+export function TenderDetail({ user }: Props) {
+  const { tenderId } = useParams()
+  const { data: tender, error, loading, reload } = useApi<Tender>(`/tenders/${tenderId}`)
+  const [applicationOpen, setApplicationOpen] = useState(false)
+  if (loading) return <Loading />
+  if (error || !tender) return <div className="page"><ErrorBox message={error || 'Tender not found'} /></div>
+  const canApply = user.role === 'BIDDER'
+  const requirements = tender.requirements || []
+  return <div className="page">
+    <Link className="back-link" to="/tenders"><ArrowLeft size={17} /> Search GeM Tenders</Link>
+    <PageHeading eyebrow="Official GeM tender" title={tender.title} description={`${tender.external_bid_id || tender.reference}${tender.organisation ? ` · ${tender.organisation}` : ''}`} actions={canApply ? <button className="btn primary" onClick={() => setApplicationOpen(true)}><Plus size={17} /> Submit bidder application</button> : undefined} />
+    <div className="detail-grid"><Panel><span className="eyebrow">Tender status</span><h3><Badge value={tender.status} /></h3><dl><dt>Deadline</dt><dd>{tender.deadline || 'Not stated'}</dd><dt>Source</dt><dd>{tender.source_url ? <a href={tender.source_url} target="_blank" rel="noreferrer">Official GeM document</a> : 'Recorded at import'}</dd><dt>Department</dt><dd>{tender.department || '—'}</dd></dl></Panel><Panel><span className="eyebrow">Document record</span><h3>{tender.tender_documents?.length || 0} source document(s)</h3><p className="muted">Every requirement below retains its extracted source text, page reference, and confidence score.</p></Panel></div>
+    <Panel><div className="section-heading"><div><span className="eyebrow">Requirement checklist</span><h2>Extracted tender requirements</h2></div><span className="muted">{requirements.length} item(s)</span></div>
+      {!requirements.length ? <Empty title="No requirements were extracted">Review the original document or import a clearer official GeM PDF.</Empty> : <div className="requirements">{requirements.map((r) => <article className="requirement" key={r.id}><div><b>{r.label}</b><p>{r.source_text}</p><small>{r.source_page ? `Page ${r.source_page} · ` : ''}{Math.round((r.confidence || 0) * 100)}% extraction confidence</small></div><div><Badge value={r.mandatory ? 'MANDATORY' : 'OPTIONAL'} />{r.accepted_evidence?.length ? <small className="evidence">Evidence: {r.accepted_evidence.join(', ')}</small> : null}</div></article>)}</div>}</Panel>
+    <Panel><div className="section-heading"><div><span className="eyebrow">Bidder applications</span><h2>Compliance review queue</h2></div><span className="muted">{tender.bids?.length || 0} application(s)</span></div><BidTable bids={tender.bids || []} /></Panel>
+    {applicationOpen && <CreateApplication tender={tender} onClose={() => setApplicationOpen(false)} onDone={() => { setApplicationOpen(false); reload() }} />}
+  </div>
 }
-export function CreateBid({tender,onClose,onSaved}:{tender:Tender;onClose:()=>void;onSaved:()=>void}){
-  const [error,setError]=useState(''),[busy,setBusy]=useState(false);const navigate=useNavigate();
-  return <Modal title="Add bidder to tender" onClose={onClose}><form onSubmit={async e=>{e.preventDefault();setBusy(true);const f=new FormData(e.currentTarget);try{const bid=await post<Bid>('/bids',{tender_id:tender.id,...Object.fromEntries(f)});onSaved();onClose();navigate(`/bids/${bid.id}?tab=Documents`);}catch(e){setError((e as Error).message);}finally{setBusy(false);}}}><div className="modal-body"><ErrorBox message={error}/><p className="subtle">{tender.reference}</p><label className="section-gap">Company name<input name="name" minLength={3} required/></label><label>PAN<input name="pan" required pattern="[A-Z]{5}[0-9]{4}[A-Z]" placeholder="ABCDE1234F"/></label><label>GSTIN<input name="gstin" required minLength={15} maxLength={15}/></label><label>Udyam number<input name="udyam"/></label><label>Address<textarea name="address"/></label><p className="inline-notice section-gap">New identities will not appear in the fictional source registry. Unmatched checks correctly return “not found” for officer review.</p></div><div className="modal-actions"><button className="button" type="button" onClick={onClose}>Cancel</button><button className="button primary" disabled={busy}>Add bidder & upload</button></div></form></Modal>;
+
+function CreateApplication({ tender, onClose, onDone }: { tender: Tender; onClose: () => void; onDone: () => void }) {
+  const [name, setName] = useState(''); const [pan, setPan] = useState(''); const [gstin, setGstin] = useState(''); const [udyam, setUdyam] = useState(''); const [address, setAddress] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
+  async function submit(e: React.FormEvent) {
+    e.preventDefault(); setBusy(true); setError('')
+    try { await post('/bids', { tender_id: tender.id, name, pan: pan.toUpperCase(), gstin: gstin.toUpperCase(), udyam, address }); onDone() }
+    catch (err) { setError(err instanceof Error ? err.message : 'Could not create application.') } finally { setBusy(false) }
+  }
+  return <Modal title="Submit bidder application" onClose={onClose}><form className="form-stack" onSubmit={submit}>
+    <p className="muted">Create the bidder application, then upload its supporting documents from the review workspace.</p>
+    <label>Bidder organisation name<input required minLength={3} value={name} onChange={(e) => setName(e.target.value)} /></label>
+    <label>PAN<input required value={pan} onChange={(e) => setPan(e.target.value)} placeholder="ABCDE1234F" /></label>
+    <label>GSTIN<input required value={gstin} onChange={(e) => setGstin(e.target.value)} placeholder="27ABCDE1234F1Z5" /></label>
+    <label>Udyam registration <span className="muted">(optional)</span><input value={udyam} onChange={(e) => setUdyam(e.target.value)} /></label>
+    <label>Registered address <textarea value={address} onChange={(e) => setAddress(e.target.value)} /></label>
+    {error && <ErrorBox message={error} />}<div className="modal-actions"><button type="button" className="btn secondary" onClick={onClose}>Cancel</button><button className="btn primary" disabled={busy}>{busy ? 'Saving…' : 'Create application'}</button></div>
+  </form></Modal>
 }

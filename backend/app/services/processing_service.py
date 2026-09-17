@@ -13,7 +13,7 @@ from app.ai.extraction import RegexEntityExtractor, parse_document
 from app.ai.classification import DemoDocumentClassifier
 from app.ai.rag import PolicyRetriever
 from app.ai.llm import MockLLMProvider, OptionalOpenAIProvider
-from app.adapters.government import ADAPTERS
+from app.adapters.government.registry import VerificationProviderRegistry, SOURCES
 from app.engines.rule_engine import RuleEvaluator
 from app.engines.scoring_engine import calculate_score
 from app.engines.anomaly_engine import RuleBasedAnomalyDetector, IsolationForestDetector
@@ -93,14 +93,14 @@ def process_bid(run_id: str, unavailable_sources=None):
                 doc.extraction = {**doc.extraction, 'classification': classification}
             stage(4, 'COMPLETED', f'{len(documents)} documents classified from extracted text')
             stage(5, 'RUNNING')
-            mapping = {'INCOME_TAX': 'PAN', 'BLACKLIST': 'PAN', 'GST': 'GSTIN'}
-            def verify(adapter_cls):
-                adapter = adapter_cls()
-                field_type = mapping.get(adapter.source, adapter.source)
+            mapping = {'GST': 'GSTIN', 'UDYAM': 'UDYAM', 'PAN': 'PAN', 'MCA': 'CIN', 'DPIIT': 'STARTUP_INDIA'}
+            registry = VerificationProviderRegistry()
+            def verify(source_row):
+                source = source_row[0]
+                field_type = mapping.get(source, source)
                 candidates = [e for e in entities if e.type == field_type]
                 entity = candidates[0] if candidates else None
-                result = adapter.verify(bidder.id, entity.normalized_value if entity else '', bidder.name,
-                                        adapter.source in (unavailable_sources or []))
+                result = registry.verify(source, entity.normalized_value if entity else '')
                 result['evidence']['input_provenance'] = 'extracted_document' if entity else 'missing_extracted_identifier'
                 result['evidence']['document_id'] = entity.document_id if entity else None
                 result['evidence']['source_page'] = entity.source_page if entity else None
@@ -119,7 +119,7 @@ def process_bid(run_id: str, unavailable_sources=None):
                     result['evidence']['reason'] = 'Conflicting identifiers across uploaded documents; first source comparison retained'
                 return entity, result
             with ThreadPoolExecutor(max_workers=6) as pool:
-                checks = list(pool.map(verify, ADAPTERS))
+                checks = list(pool.map(verify, SOURCES))
             verifications = []
             for entity, result in checks:
                 verification = SourceVerification(id=uid(), run_id=run.id, entity_id=entity.id if entity else None, **result)
@@ -127,8 +127,8 @@ def process_bid(run_id: str, unavailable_sources=None):
                 verifications.append(verification)
                 db.flush()
                 audit('SOURCE_VERIFIED', {'verification_id': verification.id, 'entity_id': verification.entity_id,
-                                          'source': verification.source, 'status': verification.status, 'is_mock': True}, verification.id, 'verification')
-            stage(5, 'COMPLETED', f'{len(verifications)} HTTP source checks recorded')
+                                          'source': verification.source, 'status': verification.status, 'is_mock': False}, verification.id, 'verification')
+            stage(5, 'COMPLETED', f'{len(verifications)} verification-provider outcomes recorded; unavailable integrations require manual review')
             stage(6, 'RUNNING')
             rules = list(db.scalars(select(TenderRule).where(TenderRule.tender_id == tender.id, TenderRule.enabled.is_(True)).order_by(TenderRule.rule_id)))
             results = []
