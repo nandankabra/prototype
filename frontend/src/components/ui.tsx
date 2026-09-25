@@ -12,7 +12,7 @@ export function Badge({ value }: { value?: string | null }) {
 }
 export function SourceStatus() { return <span className="mock-label"><ShieldCheck size={13}/> SOURCE METHOD SHOWN PER CHECK</span>; }
 export function ErrorBox({ message }: {message: string}) { return message ? <div role="alert" className="error-box"><AlertCircle size={18}/>{message}</div> : null; }
-export function Loading() { return <div className="loading"><LoaderCircle className="spin" size={22}/> Loading workspace…</div>; }
+export function Loading() { return <div className="loading" role="status" aria-live="polite"><LoaderCircle className="spin" size={22} aria-hidden="true"/> Loading workspace…</div>; }
 export function Empty({ title, children }: {title: string; children?: ReactNode}) { return <div className="empty"><ShieldCheck size={30}/><h3>{title}</h3><p>{children}</p></div>; }
 export function PageHeading({ eyebrow, title, description, actions }: {eyebrow?: string; title: string; description?: string; actions?: ReactNode}) {
   return <div className="page-heading"><div>{eyebrow && <div className="eyebrow">{eyebrow}</div>}<h1>{title}</h1>{description && <p>{description}</p>}</div><div className="heading-actions">{actions}</div></div>;
