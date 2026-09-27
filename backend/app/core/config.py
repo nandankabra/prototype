@@ -9,7 +9,9 @@ from typing import Literal
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', extra='ignore')
     app_env: str = 'development'
+    demo_mode: bool = True
     database_url: str = 'sqlite:///./data/bytecode.db'
+    mock_gov_api_url: str = 'http://localhost:8001'
     qdrant_url: str = 'http://localhost:6333'
     jwt_secret: str = ''
     llm_provider: str = 'mock'

@@ -5,13 +5,21 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-bytecode}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bytecode_local_demo}
       POSTGRES_DB: ${POSTGRES_DB:-bytecode}
-    ports: ["127.0.0.1:${POSTGRES_PORT:-5432}:5432"]
+    ports: ["127.0.0.1:${POSTGRES_PORT:-55432}:5432"]
     volumes: ["postgres_data:/var/lib/postgresql/data"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 3s
       timeout: 3s
       retries: 25
+  mock-gov-api:
+    build: ./mock-gov-api
+    ports: ["127.0.0.1:${MOCK_GOV_PORT:-8001}:8001"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
   qdrant:
     image: qdrant/qdrant:v1.13.6
     ports: ["127.0.0.1:${QDRANT_PORT:-6333}:6333"]
@@ -26,8 +34,10 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     environment:
-      APP_ENV: ${APP_ENV:-development}
+      APP_ENV: ${APP_ENV:-demo}
+      DEMO_MODE: ${DEMO_MODE:-true}
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://bytecode:bytecode_local_demo@postgres:5432/bytecode}
+      MOCK_GOV_API_URL: ${MOCK_GOV_API_URL:-http://mock-gov-api:8001}
       QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
       JWT_SECRET: ${JWT_SECRET:-}
       LLM_PROVIDER: ${LLM_PROVIDER:-mock}
@@ -44,6 +54,7 @@ services:
     volumes: ["uploads:/app/data"]
     depends_on:
       postgres: {condition: service_healthy}
+      mock-gov-api: {condition: service_healthy}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 5s

@@ -6,7 +6,7 @@ from sqlalchemy import select, text
 from app.core.database import SessionLocal
 from app.core.config import settings
 from app.core.security import current_user
-from app.api import auth, tenders, bids, documents, audit, dashboard, evidence, sources
+from app.api import auth, tenders, bids, documents, audit, dashboard, evidence, sources, demo
 from app.models import Bid, ProcessingRun
 from app.services.source_registry import ensure_sources
 
@@ -27,7 +27,7 @@ async def lifespan(app):
             run.status = 'FAILED'
             run.error = 'Service restarted during this run. Start a new review; saved evidence is retained.'
             bid = db.get(Bid, run.bid_id)
-            if bid.current_run_id == run.id:
+            if bid and bid.current_run_id == run.id:
                 bid.status = 'PROCESSING_FAILED'
         db.commit()
         ensure_sources(db)
@@ -38,7 +38,7 @@ app = FastAPI(title='ByteCode Verify API', version='1.0.0', lifespan=lifespan,
               description='Evidence-backed procurement verification and decision support. Officers retain final authority.')
 app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:3000', 'http://127.0.0.1:3000'],
                    allow_credentials=True, allow_methods=['GET', 'POST', 'PUT'], allow_headers=['Authorization', 'Content-Type'])
-for router in [auth.router, tenders.router, bids.router, documents.router, audit.router, dashboard.router, evidence.router, sources.router]:
+for router in [auth.router, tenders.router, bids.router, documents.router, audit.router, dashboard.router, evidence.router, sources.router, demo.router]:
     app.include_router(router)
 
 
@@ -46,12 +46,12 @@ for router in [auth.router, tenders.router, bids.router, documents.router, audit
 def health():
     with SessionLocal() as db:
         db.execute(text('SELECT 1'))
-    return {'status': 'ok', 'app': 'ByteCode Verify'}
+    return {'status': 'ok', 'app': 'ByteCode Verify', 'demo_mode': settings.demo_mode}
 
 
 @app.get('/api/system', tags=['health'])
 def system(user=Depends(current_user)):
-    return {'database': 'PostgreSQL' if settings.database_url.startswith('postgres') else 'SQLite local fallback',
+    return {'demo_mode': settings.demo_mode, 'database': 'PostgreSQL' if settings.database_url.startswith('postgres') else 'SQLite local fallback',
             'source_label': 'Authoritative source registry', 'source_count': 11,
             'ocr': 'PaddleOCR → Tesseract → readable PDF text; unreadable content requires manual review',
             'heavy_ml_enabled': settings.enable_heavy_ml, 'vector': 'Qdrant → FAISS → in-memory',

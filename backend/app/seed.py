@@ -30,9 +30,16 @@ def seed():
             db.commit()
         for i, title in enumerate(TENDER_TITLES):
             tender_id = stable_id(f'tender-{i}')
-            if db.get(Tender, tender_id):
+            existing = db.get(Tender, tender_id)
+            if existing:
+                if existing.source != 'GEM':
+                    existing.source = 'GEM'
+                if not existing.external_bid_id:
+                    existing.external_bid_id = f'GEM/2026/B/{1000+i}'
+                db.commit()
                 continue
             db.add(Tender(id=tender_id, reference=f'CPCL/2026/PROC/{i+1:03}', title=title,
+                          external_bid_id=f'GEM/2026/B/{1000+i}', source='GEM',
                           department='Chennai Petroleum Corporation Limited', deadline='2026-09-30T17:00:00+05:30',
                           description='Fictional procurement tender for the CPCL demo. Review bidder eligibility, documentary evidence, and mandatory compliance requirements.',
                           required_documents=['pan', 'gst_certificate', 'udyam', 'oem_authorization', 'experience_certificate', 'tax_compliance'],

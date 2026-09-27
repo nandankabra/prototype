@@ -45,8 +45,8 @@ def officer(user: User = Depends(current_user)) -> User:
 
 
 def bidder(user: User = Depends(current_user)) -> User:
-    if user.role != 'BIDDER':
-        raise HTTPException(403, 'This action is available to the submitting bidder')
+    if user.role not in {'BIDDER', 'PROCUREMENT_OFFICER', 'ADMIN'}:
+        raise HTTPException(403, 'This action is available to the submitting bidder or procurement officer')
     return user
 
 

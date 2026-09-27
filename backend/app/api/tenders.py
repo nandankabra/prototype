@@ -30,7 +30,7 @@ def get_tender(db, tender_id):
 @router.get('')
 def tenders(query: str = '', category: str = '', tender_type: str = '', db: Session = Depends(get_db), user=Depends(current_user)):
     results = []
-    statement = select(Tender).where(Tender.source == 'GEM').order_by(Tender.deadline)
+    statement = select(Tender).where(Tender.source.in_(['GEM', 'MANUAL_DRAFT', 'IMPORTED', 'LEGACY_ARCHIVED'])).order_by(Tender.deadline)
     for tender in db.scalars(statement):
         searchable = ' '.join(filter(None, [tender.reference, tender.external_bid_id, tender.title, tender.department, tender.ministry, tender.category])).lower()
         if query and query.lower() not in searchable:

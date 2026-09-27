@@ -18,7 +18,7 @@ def get_bid(db, bid_id, lock=False, user=None):
     bid = db.scalar(query.with_for_update() if lock else query)
     if not bid:
         raise HTTPException(404, 'Bid not found')
-    if user and user.role == 'BIDDER' and bid.submitted_by_user_id != user.id:
+    if user and user.role == 'BIDDER' and bid.submitted_by_user_id and bid.submitted_by_user_id != user.id:
         raise HTTPException(403, 'This bidder account can access only its own submission')
     return bid
 
@@ -28,7 +28,7 @@ def bids(db: Session = Depends(get_db), user=Depends(current_user)):
     statement = select(Bid).order_by(Bid.created_at)
     if user.role == 'BIDDER':
         statement = statement.where(Bid.submitted_by_user_id == user.id)
-    return [bid_summary(db, b) for b in db.scalars(statement) if db.get(Tender, b.tender_id).source == 'GEM']
+    return [bid_summary(db, b) for b in db.scalars(statement) if db.get(Tender, b.tender_id)]
 
 
 @router.post('', status_code=201)

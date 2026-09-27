@@ -13,7 +13,7 @@ router = APIRouter(prefix='/api/dashboard', tags=['dashboard'])
 
 @router.get('/summary')
 def summary(db: Session = Depends(get_db), user=Depends(current_user)):
-    bids = [bid_summary(db, b) for b in db.scalars(select(Bid).order_by(Bid.created_at)) if db.get(Tender, b.tender_id).source == 'GEM']
+    bids = [bid_summary(db, b) for b in db.scalars(select(Bid).order_by(Bid.created_at)) if db.get(Tender, b.tender_id)]
     scores = [b['compliance_score'] for b in bids if b['compliance_score'] is not None]
     current_runs = [b['current_run_id'] for b in bids if b['current_run_id']]
     verification = Counter(v.status for v in db.scalars(select(SourceVerification).where(SourceVerification.run_id.in_(current_runs))))
@@ -21,7 +21,7 @@ def summary(db: Session = Depends(get_db), user=Depends(current_user)):
     distribution = Counter('90–100' if s >= 90 else '75–89' if s >= 75 else '50–74' if s >= 50 else '0–49' for s in scores)
     throughput = Counter(str(d.created_at.date()) for d in db.scalars(select(OfficerDecision)))
     events = list(db.scalars(select(AuditEvent).order_by(AuditEvent.sequence)))
-    imported_tenders = [t.id for t in db.scalars(select(Tender).where(Tender.source == 'GEM'))]
+    imported_tenders = [t.id for t in db.scalars(select(Tender).where(Tender.source.in_(['GEM', 'MANUAL_DRAFT', 'IMPORTED', 'LEGACY_ARCHIVED'])))]
     return {'total_tenders': len(imported_tenders), 'total_bids': len(bids),
             'total_documents': sum(len(list(db.scalars(select(Document).where(Document.bid_id == b['id'])))) for b in bids),
             'active_reviews': sum(b['status'] == 'PROCESSING' for b in bids),
