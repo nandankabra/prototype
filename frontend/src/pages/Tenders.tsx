@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Plus, Search, ShieldCheck, Upload } from 'lucide-react'
 import type { Tender, User } from '../types'
 import { formPost, post, useApi } from '../services/api'
@@ -64,7 +64,7 @@ export function TenderDetail({ user }: Props) {
   const [applicationOpen, setApplicationOpen] = useState(false)
   if (loading) return <Loading />
   if (error || !tender) return <div className="page"><ErrorBox message={error || 'Tender not found'} /></div>
-  const canApply = user.role === 'BIDDER'
+  const canApply = user.role !== 'AUDITOR'
   const requirements = tender.requirements || []
   return <div className="page">
     <Link className="back-link" to="/tenders"><ArrowLeft size={17} /> Search GeM Tenders</Link>
@@ -79,18 +79,46 @@ export function TenderDetail({ user }: Props) {
 
 function CreateApplication({ tender, onClose, onDone }: { tender: Tender; onClose: () => void; onDone: () => void }) {
   const [name, setName] = useState(''); const [pan, setPan] = useState(''); const [gstin, setGstin] = useState(''); const [udyam, setUdyam] = useState(''); const [address, setAddress] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false)
+  const navigate = useNavigate()
+
+  function quickFill(type: 'meridian' | 'zenith') {
+    if (type === 'meridian') {
+      setName('Meridian Safety Systems Pvt Ltd')
+      setPan('AAACM1234F')
+      setGstin('27AAACM1234F1Z5')
+      setUdyam('UDYAM-MH-03-0012345')
+      setAddress('Plot 42, MIDC Industrial Area, Andheri East, Mumbai, Maharashtra 400093')
+    } else {
+      setName('Zenith Industrial Solutions Pvt Ltd')
+      setPan('AAACZ5678K')
+      setGstin('07AAACZ5678K1Z2')
+      setUdyam('UDYAM-DL-01-0098765')
+      setAddress('108 Okhla Phase III, New Delhi 110020')
+    }
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setBusy(true); setError('')
-    try { await post('/bids', { tender_id: tender.id, name, pan: pan.toUpperCase(), gstin: gstin.toUpperCase(), udyam, address }); onDone() }
+    try {
+      const res = await post<{ id: string }>('/bids', { tender_id: tender.id, name, pan: pan.toUpperCase(), gstin: gstin.toUpperCase(), udyam, address })
+      onDone()
+      if (res && res.id) {
+        navigate(`/bids/${res.id}?tab=Documents`)
+      }
+    }
     catch (err) { setError(err instanceof Error ? err.message : 'Could not create application.') } finally { setBusy(false) }
   }
   return <Modal title="Submit bidder application" onClose={onClose}><form className="form-stack" onSubmit={submit}>
     <p className="muted">Create the bidder application, then upload its supporting documents from the review workspace.</p>
+    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+      <button type="button" className="btn secondary" style={{ fontSize: '0.82rem', padding: '6px 10px' }} onClick={() => quickFill('meridian')}>⚡ Fill Meridian (Clean Bid)</button>
+      <button type="button" className="btn secondary" style={{ fontSize: '0.82rem', padding: '6px 10px' }} onClick={() => quickFill('zenith')}>⚠️ Fill Zenith (Multi-Risk Bid)</button>
+    </div>
     <label>Bidder organisation name<input required minLength={3} value={name} onChange={(e) => setName(e.target.value)} /></label>
     <label>PAN<input required value={pan} onChange={(e) => setPan(e.target.value)} placeholder="ABCDE1234F" /></label>
     <label>GSTIN<input required value={gstin} onChange={(e) => setGstin(e.target.value)} placeholder="27ABCDE1234F1Z5" /></label>
     <label>Udyam registration <span className="muted">(optional)</span><input value={udyam} onChange={(e) => setUdyam(e.target.value)} /></label>
     <label>Registered address <textarea value={address} onChange={(e) => setAddress(e.target.value)} /></label>
-    {error && <ErrorBox message={error} />}<div className="modal-actions"><button type="button" className="btn secondary" onClick={onClose}>Cancel</button><button className="btn primary" disabled={busy}>{busy ? 'Saving…' : 'Create application'}</button></div>
+    {error && <ErrorBox message={error} />}<div className="modal-actions"><button type="button" className="btn secondary" onClick={onClose}>Cancel</button><button className="btn primary" disabled={busy}>{busy ? 'Saving…' : 'Create application & Upload documents'}</button></div>
   </form></Modal>
 }
